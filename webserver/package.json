@@ -1,0 +1,25 @@
+{
+  "name": "webserver",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "librivox webserver",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "librivox"
+  },
+  "author": "Adhip Kashyap",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.24.0",
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "form-data": "^4.0.0",
+    "node-fetch": "^3.1.0",
+    "pastebin-api": "^2.5.0",
+    "xml2js": "^0.4.23"
+  }
+}
