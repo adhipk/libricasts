@@ -1,0 +1,26 @@
+{% for book in books if book.title %}
+    <div class="search-result">
+        
+        <h4>{{ book['title'] }}</h4>
+        {% for author in book['authors'] %} 
+            <p>Author: {{ author["first_name"]}} {{author["last_name"]}}</p> 
+        {% endfor %}
+        <p>Year: {{ book['copyright_year'] }}</p>
+        <p>Duration: {{ book['totaltime'] }}</p>
+        <button
+            hx-post="/upload"
+            hx-vals='"rss_url": "{{ book.url_rss }}", "title": "{{ book.title }}"'
+            hx-swap="outerHTML"
+            hs-target="this"
+            class="link"
+            id="book-{{book.id }}"
+            hx-indicator="#book-{{book.id}} > .htmx-indicator"
+        >
+            Generate PocketCasts Link <span class="loader htmx-indicator"></span>
+        </button>
+
+        
+    </div>
+{% else %}
+    <div class="search-result">No Audiobooks found</div>
+{% endfor %}
