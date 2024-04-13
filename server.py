@@ -18,7 +18,7 @@ def search():
         return jsonify({'error': 'Missing book title'}), 400
 
     search_results = getBooks(title)
-    print(search_results)
+    # print(search_results)
     return render_template("book_info.html", books=search_results)
 
 

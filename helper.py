@@ -32,7 +32,12 @@ def writeGist(content,filename):
     res=requests.post(url,headers=headers,params=params,data=json.dumps(payload))
     
     response = res.json()
-    return response["files"][filename]["raw_url"]
+    # print("resp",response,type(res.status_code)) 
+    if res.status_code >= 200 and res.status_code < 300:
+        
+        return response["files"][filename]["raw_url"]
+    else:
+        return None
 
 def uploadToPocketcasts(rss_url):
     # print("url",rss_url)
@@ -51,8 +56,10 @@ def uploadToPocketcasts(rss_url):
         
         if(result["status"] == "poll"):
             # wait 2 secs then call api again;
+            timeout = 0.5
             while result["status"] == "poll":
-                sleep(1)
+                sleep(timeout)
+                timeout *= 2
                 response = requests.post(endpoint,headers=headers,json=payload)
                 result = response.json()
         if(result["status"] == "ok"):
@@ -95,6 +102,9 @@ def uploadRss(librivox_rss_url,book_title):
     if(pocketCasts["status"] !='ok'):
         fixed_rss = fixRSSfile(librivox_rss_url)
         rss_url = writeGist(fixed_rss,book_title)
-        pocketCasts = uploadToPocketcasts(rss_url)
+        if(rss_url):
+            pocketCasts = uploadToPocketcasts(rss_url)
+        else:
+            return {"status":"error","message":"Failed to upload to gist"}
     # print("pocketCasts",pocketCasts)
     return pocketCasts
