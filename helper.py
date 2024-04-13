@@ -1,6 +1,6 @@
 import requests
 import os
-import pprint
+
 import json
 import re
 from time import sleep
@@ -13,7 +13,7 @@ GITHUB_TOKEN = os.environ.get("GITHUB_TOKEN","")
 def writeGist(content,filename):
     filename = f"{filename}.rss"
     url=GITHUB_API+"/gists"
-    print("Request URL: %s"%url)
+    # print("Request URL: %s"%url)
 
     #print headers,parameters,payload
     headers={"Authorization":"token %s"%GITHUB_TOKEN}
@@ -35,7 +35,7 @@ def writeGist(content,filename):
     return response["files"][filename]["raw_url"]
 
 def uploadToPocketcasts(rss_url):
-    print("url",rss_url)
+    # print("url",rss_url)
     endpoint = "https://refresh.pocketcasts.com/author/add_feed_url"
     headers={
         "origin": "https://pocketcasts.com",
@@ -96,5 +96,5 @@ def uploadRss(librivox_rss_url,book_title):
         fixed_rss = fixRSSfile(librivox_rss_url)
         rss_url = writeGist(fixed_rss,book_title)
         pocketCasts = uploadToPocketcasts(rss_url)
-    print("pocketCasts",pocketCasts)
+    # print("pocketCasts",pocketCasts)
     return pocketCasts
