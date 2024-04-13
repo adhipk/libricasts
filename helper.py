@@ -8,7 +8,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 GITHUB_API = "https://api.github.com"
-GITHUB_TOKEN = os.getenv("GITHUB_TOKEN","")
+GITHUB_TOKEN = os.environ.get("GITHUB_TOKEN","")
 
 def writeGist(content,filename):
     filename = f"{filename}.rss"
