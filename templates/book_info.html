@@ -9,7 +9,7 @@
         <p>Duration: {{ book['totaltime'] }}</p>
         <button
             hx-post="/upload"
-            hx-vals='"rss_url": "{{ book.url_rss }}", "title": "{{ book.title }}"'
+            hx-vals='"rss_url": "{{ book.url_rss }}", "title": "{{ book.title }}","id": {{book.id}}'
             hx-swap="outerHTML"
             hs-target="this"
             class="link"

@@ -1,15 +1,17 @@
 import requests
 import os
-
+import logging
 import json
 import re
 from time import sleep
 from dotenv import load_dotenv
-
+from redisHelper import RedisHelper
 load_dotenv()
 GITHUB_API = "https://api.github.com"
 GITHUB_TOKEN = os.environ.get("GITHUB_TOKEN","")
 
+r = RedisHelper()
+log = logging.getLogger('root.helper')
 def writeGist(content,filename):
     filename = f"{filename}.rss"
     url=GITHUB_API+"/gists"
@@ -96,15 +98,30 @@ def getBooks(search_title):
     return []
 
 
-def uploadRss(librivox_rss_url,book_title):
+def uploadRss(librivox_rss_url,book_title,book_id):
+    key = f"book_{book_id}"
     # check if original file works
     pocketCasts = uploadToPocketcasts(librivox_rss_url)
     if(pocketCasts["status"] !='ok'):
-        fixed_rss = fixRSSfile(librivox_rss_url)
-        rss_url = writeGist(fixed_rss,book_title)
+        
+        # check if it is already in redis
+        cached_rss_url = r.get(key)
+        if cached_rss_url:
+            log.info(f"use the cached url {cached_rss_url}")
+            rss_url = cached_rss_url
+        else:
+            fixed_rss = fixRSSfile(librivox_rss_url)
+            log.info(f"generate a new url {fixed_rss}")
+            rss_url = writeGist(fixed_rss,f"librivox_{book_id}")
+            # store the gist url in redis
+            r.set(key,rss_url)
+        
+        
         if(rss_url):
             pocketCasts = uploadToPocketcasts(rss_url)
         else:
+            # delete the gist url in redis
+            r.delete(key)
             return {"status":"error","message":"Failed to upload to gist"}
-    # print("pocketCasts",pocketCasts)
+
     return pocketCasts

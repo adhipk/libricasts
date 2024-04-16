@@ -27,8 +27,10 @@ def search():
 def upload():
     rss_url = request.form.get("rss_url",'',type=str)
     title = request.form.get("title",'',type=str)
-    app.logger.info(f"{rss_url},{title}")
-    result = uploadRss(rss_url,title)
+    book_id = request.form.get("id",'',type=int)
+    app.logger.info(f"request info{rss_url},{title},{book_id}")
+    result = uploadRss(rss_url,title,book_id)
+
     if(result['status'] == 'ok'):
         return render_template("link.html",url = result['url'])
     else:
