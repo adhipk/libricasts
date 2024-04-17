@@ -1,35 +1,40 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <title>LibriCasts</title>
-</head>
-<body>
-    <header>
-        <h1>LibriCasts</h1>
-        <h2>A tool to import Librivox Audiobooks to PocketCasts</h2>
-    </header>
-    <main>
-        <div class="search-box">
-            
-            <span class="htmx-indicator"> 
-                Searching... 
-            </span> 
-            <input class="form-control" type="title" 
-                name="title" placeholder="Begin Typing To Search Title..." 
-                hx-get="/search"
-                hx-trigger="input changed delay:500ms, search" 
-                hx-target="#search-results" 
-                hx-indicator=".htmx-indicator"
-            >    
-        </div>
-        
-          
-        <div class="search-results-container" id="search-results">    
-        </div>
-    </main>
-    <script src="https://unpkg.com/htmx.org@1.8.5"></script>
-</body>
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<link
+			rel="stylesheet"
+			href="{{ url_for('static', filename='style.css') }}"
+		/>
+		<title>LibriCasts</title>
+	</head>
+	<body>
+		<navbar>
+			<h1>LibriCasts</h1>
+		</navbar>
+		<main>
+			<p>Import Librivox Audiobooks to PocketCasts</p>
+
+				<div class="search-box" id="search-box">
+					
+
+					<input
+						class="form-control"
+						type="title"
+						name="title"
+						placeholder="Begin Typing To Search Title..."
+						hx-get="/search"
+						hx-trigger="input changed delay:500ms, search"
+						hx-target="#search-results"
+						hx-indicator="#search-box >.htmx-indicator"
+					/>
+                    <div class="htmx-indicator">Searching...</div>
+				</div>
+
+				<div class="search-results-container" id="search-results"></div>
+
+		</main>
+		<script src="https://unpkg.com/htmx.org@1.8.5"></script>
+	</body>
 </html>

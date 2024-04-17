@@ -1,6 +1,7 @@
 from flask import Flask, request, jsonify, render_template
 from helper import getBooks, uploadRss
 import os
+from time import sleep
 from dotenv import load_dotenv
 app = Flask(__name__)
 load_dotenv()
@@ -12,6 +13,7 @@ def index():
 
 @app.route('/search', methods=['GET'])
 def search():
+    sleep(2)
     title = request.args.get('title', '',type=str)
 
     if not title:
