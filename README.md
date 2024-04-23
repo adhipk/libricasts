@@ -16,7 +16,7 @@ Librivox.org hosts public domain audiobooks recorded by volunteers, they also pr
 3. Copy the .env.example file to .env and fill in the values
 ### Running the app
 
-1. From the root of the repo run `python app.py`
+1. From the root of the repo run `python server.py`
 
 
 ### Licence
