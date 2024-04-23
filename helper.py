@@ -12,7 +12,7 @@ GITHUB_TOKEN = os.environ.get("GITHUB_TOKEN","")
 
 r = RedisHelper()
 log = logging.getLogger('root.helper')
-def writeGist(content,filename):
+def writeGist(content:str,filename:str):
     filename = f"{filename}.rss"
     url=GITHUB_API+"/gists"
     # print("Request URL: %s"%url)
@@ -32,16 +32,16 @@ def writeGist(content,filename):
 
     #make a requests
     res=requests.post(url,headers=headers,params=params,data=json.dumps(payload))
-    
+
     response = res.json()
-    # print("resp",response,type(res.status_code)) 
+    # print("resp",response,type(res.status_code))
     if res.status_code >= 200 and res.status_code < 300:
-        
+
         return response["files"][filename]["raw_url"]
     else:
         return None
 
-def uploadToPocketcasts(rss_url):
+def uploadToPocketcasts(rss_url:str):
     # print("url",rss_url)
     endpoint = "https://refresh.pocketcasts.com/author/add_feed_url"
     headers={
@@ -53,9 +53,10 @@ def uploadToPocketcasts(rss_url):
         "url":rss_url
     }
     response = requests.post(endpoint,headers=headers,json=payload)
+    result = response.json()
     if response.status_code==200:
-        result = response.json()
-        
+
+
         if(result["status"] == "poll"):
             # wait 2 secs then call api again;
             timeout = 0.5
@@ -72,7 +73,7 @@ def uploadToPocketcasts(rss_url):
 def fixRSSfile(rss_url):
     rss_response = requests.get(rss_url)
     rss_response_content = rss_response.text
-    
+
     # add valid pubdate
     rss_response_content = re.sub(
         pattern=r"<!--<pubDate>file element=rss.pubDate</pubDate>-->",
@@ -82,7 +83,7 @@ def fixRSSfile(rss_url):
     return rss_response_content
 def getBooks(search_title):
     r = "https://librivox.org/api/feed/audiobooks/"
-    
+
     req =requests.get(
         r,
         params={
@@ -91,7 +92,7 @@ def getBooks(search_title):
             "limit":10
         }
     )
-    
+
     result = req.json()
     if 'books' in result:
         return result["books"]
@@ -103,7 +104,7 @@ def uploadRss(librivox_rss_url,book_title,book_id):
     # check if original file works
     pocketCasts = uploadToPocketcasts(librivox_rss_url)
     if(pocketCasts["status"] !='ok'):
-        
+
         # check if it is already in redis
         cached_rss_url = r.get(key)
         if cached_rss_url:
@@ -115,8 +116,8 @@ def uploadRss(librivox_rss_url,book_title,book_id):
             rss_url = writeGist(fixed_rss,f"librivox_{book_id}")
             # store the gist url in redis
             r.set(key,rss_url)
-        
-        
+
+
         if(rss_url):
             pocketCasts = uploadToPocketcasts(rss_url)
         else:
