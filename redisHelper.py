@@ -11,23 +11,33 @@ class RedisHelper:
         self.KV_REST_API_URL = KV_REST_API_URL
         self.KV_REST_API_TOKEN = KV_REST_API_TOKEN
     def get(self,key):
-        res = requests.get(f"{KV_REST_API_URL}/get/{key}",
-                headers={"Authorization":f"Bearer {KV_REST_API_TOKEN}"})
-        if res.status_code == 200:
-            return res.json()['result']
-        return None
+        try:
+            
+            res = requests.get(f"{KV_REST_API_URL}/get/{key}",
+                    headers={"Authorization":f"Bearer {KV_REST_API_TOKEN}"})
+            if res.status_code == 200:
+                return res.json()['result']
+            return None
+        except:
+            return None
 
     def set(self,key,value):
-        res = requests.post(f"{KV_REST_API_URL}",
-                headers={"Authorization":f"Bearer {KV_REST_API_TOKEN}"},
-                data=f'["SET", "{key}", "{value}"]')
-        if res.status_code == 200:
+        try:
+            res = requests.post(f"{KV_REST_API_URL}",
+                    headers={"Authorization":f"Bearer {KV_REST_API_TOKEN}"},
+                    data=f'["SET", "{key}", "{value}"]')
+            if res.status_code == 200:
+                return res.json()
             return res.json()
-        return res.json()
+        except:
+            return None
     def delete(self,key):
-        res = requests.post(f"{KV_REST_API_URL}",
-                headers={"Authorization":f"Bearer {KV_REST_API_TOKEN}"},
-                data=f'["DEL", "{key}"]')
-        if res.status_code == 200:
+        try:
+            res = requests.post(f"{KV_REST_API_URL}",
+                    headers={"Authorization":f"Bearer {KV_REST_API_TOKEN}"},
+                    data=f'["DEL", "{key}"]')
+            if res.status_code == 200:
+                return res.json()
             return res.json()
-        return res.json()
+        except:
+            return None
