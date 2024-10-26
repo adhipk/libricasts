@@ -38,4 +38,4 @@ def upload():
     else:
         return render_template("error.html",error = result['message'])
 if __name__ == '__main__':
-    app.run(threaded = True, debug = FLASK_ENV=='dev')
+    app.run(threaded = True, debug = FLASK_ENV=='dev', port=8000)

@@ -27,14 +27,20 @@
 						hx-get="/search"
 						hx-trigger="input changed delay:500ms, search"
 						hx-target="#search-results"
-						hx-indicator="#search-box >.htmx-indicator"
+						hx-indicator="#main-loader"
 					/>
-                    <div class="htmx-indicator">Searching...</div>
+					
+					
 				</div>
-
+				<div class="htmx-indicator" style="align-self: center; justify-self: center;" id="main-loader"> 
+					<div class="loader big white"></div>		
+				</div>
 				<div class="search-results-container" id="search-results"></div>
-
+			
 		</main>
+		<footer class="footer">
+			<p>Made with ❤️ by <a href="https://github.com/adhipk">Adhip Kashyap</a></p>
+		<footer>
 		<script src="https://unpkg.com/htmx.org@1.8.5"></script>
 	</body>
 </html>

@@ -1,8 +1,11 @@
+
 import requests
 import os
 import logging
 import json
 import re
+from datetime import datetime
+from email import utils
 from time import sleep
 from dotenv import load_dotenv
 from redisHelper import RedisHelper
@@ -75,10 +78,12 @@ def fixRSSfile(rss_url):
     rss_response_content = rss_response.text
 
     # add valid pubdate
+    now_datetime = utils.format_datetime(datetime.now())
+        
     rss_response_content = re.sub(
         pattern=r"<!--<pubDate>file element=rss.pubDate</pubDate>-->",
         string=rss_response_content,
-        repl="<pubDate>2020-01-05T19:11:09Z</pubDate>"
+        repl=f"<pubDate>{now_datetime}</pubDate>"
     )
     return rss_response_content
 def getBooks(search_title):

@@ -5,16 +5,18 @@ html{
     font-family: sans-serif;
     color: rgba(255, 255, 255, 0.87);
     background-color: #242424;
+    height: 100%;
    
 }
 body {
     margin:auto;
     display: flex;
-    width:page-width;
-    height:page-height;
+    min-height: 100%;
+    width: 100%;
     flex-direction: column;
     align-items: center;
     column-gap: 10px;
+    justify-content: stretch;
 }
 main{
     width: 100%;
@@ -22,29 +24,46 @@ main{
     flex-direction: column;
     align-items: center;
     column-gap: 10px;
+    flex:1
 }
 .search-box {
     display: flex;
 
     flex-direction: column;
     margin: 10px;
-    width:100%;
+    width:300px;
     text-align: center;
     
 }
 
 .search-box input{
     width:100%;
-    margin-inline: 10px;
+
 }
 
 .search-results-container {
-    display: flex;
-   
-    flex-wrap: wrap;
-    justify-content: space-evenly;
-    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+    justify-content: center;
+    width:100%;
+    padding:20px;
 }
+.search-result {
+    background-color: #3a2d49;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+.book-info{
+    flex:1;
+    word-wrap: break-word;
+
+}
+
 navbar{
     width: 100%;
     display: flex;
@@ -54,15 +73,6 @@ navbar{
     background-color: #3a2d49;
     color: white;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
-}
-.search-result {
-    background-color: #3a2d49;
-    width: 300px;
-    margin: 10px;
-    padding: 20px;
-    /* border: 1px solid #ccc; */
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 .search-result h4 {
@@ -88,6 +98,7 @@ navbar{
     border: 1px solid #ccc;
     border-radius: 5px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    justify-self: end;
 }
 
 .link a {
@@ -134,10 +145,10 @@ button {
     display:none;
 }
 .htmx-request .htmx-indicator{
-    display:inline;
+    display:flex;
 }
 .htmx-request.htmx-indicator{
-    display:inline;
+    display:flex;
 }
 /* HTML: <div class="loader"></div> */
 .loader {
@@ -174,3 +185,13 @@ button {
   a{
     color: inherit;
   }
+.white{
+    --c: no-repeat linear-gradient(#fff 0 0);
+}
+.big{
+    width:100px;
+    height: 100px;   
+}
+.footer {
+    justify-self: flex-end;
+}
