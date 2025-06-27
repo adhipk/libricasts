@@ -3,10 +3,10 @@
         <div class="book-info">
             <h4>{{ book['title'] }}</h4>
             {% for author in book['authors'] %} 
-            <p>Author: {{ author["first_name"]}} {{author["last_name"]}}</p> 
+            <p><strong>Author:</strong> {{ author["first_name"]}} {{author["last_name"]}}</p> 
             {% endfor %}
-            <p>Year: {{ book['copyright_year'] }}</p>
-            <p>Duration: {{ book['totaltime'] }}</p>    
+            <p><strong>Year:</strong> {{ book['copyright_year'] }}</p>
+            <p><strong>Duration:</strong> {{ book['totaltime'] }}</p>    
         </div>
         
         <button
@@ -18,11 +18,15 @@
             id="book-{{book.id }}"
             hx-indicator="#book-{{book.id}} > .htmx-indicator"
         >
-            Generate PocketCasts Link <span class="loader htmx-indicator"></span>
+            <span class="button-text">Generate PocketCasts Link</span>
+            <span class="loader htmx-indicator"></span>
         </button>
-
-        
     </div>
 {% else %}
-    <div class="search-result">No Audiobooks found</div>
+    <div class="search-result no-results">
+        <div class="book-info">
+            <h4>No Audiobooks Found</h4>
+            <p>Try searching with different keywords or check your spelling.</p>
+        </div>
+    </div>
 {% endfor %}

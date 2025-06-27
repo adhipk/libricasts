@@ -3,44 +3,106 @@
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<link rel="preconnect" href="https://fonts.googleapis.com">
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+		<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 		<link
 			rel="stylesheet"
 			href="{{ url_for('static', filename='style.css') }}"
 		/>
-		<title>LibriCasts</title>
+		<title>LibriCasts - Import Librivox Audiobooks to PocketCasts</title>
+		<meta name="description" content="Convert Librivox audiobooks to PocketCasts format. Search and import free audiobooks from Librivox to your PocketCasts app.">
 	</head>
 	<body>
 		<navbar>
 			<h1>LibriCasts</h1>
 		</navbar>
 		<main>
-			<p>Import Librivox Audiobooks to PocketCasts</p>
+			<p>Transform Librivox audiobooks into PocketCasts format</p>
+			<p style="font-size: 1rem; color: #64748b; margin-top: -1rem;">Search for free audiobooks and generate PocketCasts links instantly</p>
 
-				<div class="search-box" id="search-box">
-					
-
-					<input
-						class="form-control"
-						type="title"
-						name="title"
-						placeholder="Begin Typing To Search Title..."
-						hx-get="/search"
-						hx-trigger="input changed delay:500ms, search"
-						hx-target="#search-results"
-						hx-indicator="#main-loader"
-					/>
-					
-					
-				</div>
-				<div class="htmx-indicator" style="align-self: center; justify-self: center;" id="main-loader"> 
-					<div class="loader big white"></div>		
-				</div>
-				<div class="search-results-container" id="search-results"></div>
+			<div class="search-box" id="search-box">
+				<input
+					class="form-control"
+					type="text"
+					name="title"
+					placeholder="Search for audiobooks by title, author, or keywords..."
+					hx-get="/search"
+					hx-trigger="input changed delay:800ms, search"
+					hx-target="#search-results"
+					hx-indicator="#main-loader"
+					hx-swap="innerHTML"
+					hx-sync="this:replace"
+					autocomplete="off"
+					minlength="2"
+				/>
+			</div>
 			
+			<div class="htmx-indicator" id="main-loader"> 
+				<div class="loader big white"></div>		
+			</div>
+			
+			<div class="search-results-container" id="search-results">
+				<!-- Search results will appear here -->
+			</div>
 		</main>
 		<footer class="footer">
-			<p>Made with ❤️ by <a href="https://github.com/adhipk">Adhip Kashyap</a></p>
-		<footer>
+			<p>Made with ❤️ by <a href="https://github.com/adhipk" target="_blank" rel="noopener">Adhip Kashyap</a></p>
+		</footer>
 		<script src="https://unpkg.com/htmx.org@1.8.5"></script>
+		<script>
+			// Enhanced debouncing with HTMX
+			document.addEventListener('DOMContentLoaded', function() {
+				const searchInput = document.querySelector('input[name="title"]');
+				let searchTimeout;
+				
+				// Clear previous search when starting a new one
+				searchInput.addEventListener('input', function() {
+					// Clear any existing timeout
+					if (searchTimeout) {
+						clearTimeout(searchTimeout);
+					}
+					
+					// Clear results if input is too short
+					if (this.value.length < 2) {
+						document.getElementById('search-results').innerHTML = '';
+						return;
+					}
+					
+					// Show loading indicator
+					document.getElementById('main-loader').style.display = 'flex';
+				});
+				
+				// Add custom event listener for better debouncing
+				searchInput.addEventListener('keyup', function(e) {
+					// Don't search on arrow keys, shift, ctrl, etc.
+					if (e.key === 'ArrowUp' || e.key === 'ArrowDown' || e.key === 'ArrowLeft' || 
+						e.key === 'ArrowRight' || e.key === 'Shift' || e.key === 'Control' || 
+						e.key === 'Alt' || e.key === 'Meta') {
+						return;
+					}
+					
+					// Clear existing timeout
+					if (searchTimeout) {
+						clearTimeout(searchTimeout);
+					}
+					
+					// Set new timeout for debouncing
+					searchTimeout = setTimeout(() => {
+						if (this.value.length >= 2) {
+							// Trigger HTMX request
+							htmx.trigger(this, 'search');
+						}
+					}, 800);
+				});
+				
+				// Clear timeout on blur
+				searchInput.addEventListener('blur', function() {
+					if (searchTimeout) {
+						clearTimeout(searchTimeout);
+					}
+				});
+			});
+		</script>
 	</body>
 </html>
